@@ -106,8 +106,24 @@ class HorizontalSlice {
     }
     
   }
+  
   CheckSingleSliceConditions() {
     
+    var check1 = this.Check({"lady": "Doctor Marcolla", "spot": 1});
+    var check2 = this.Check({"spot": 2, "color": "White"});
+    var check3 = this.Check({"spot": 3, "drink": "Wine"});
+    var check4 = this.Check({"lady": "Countess Contee", "drink": "Beer"});
+    var check5 = this.Check({"color": "Green", "origin": "Karnaca"});
+    var check6 = this.Check({"origin": "Dunwall", "drink": "Whiskey"});
+    var check7 = this.Check({"origin": "Fraeport", "heirloom": "Diamond"});
+    
+    var check8 = this.Check({"lady": "Lady Winslow", "origin": "Baleton"});
+    var check9 = this.Check({"lady": "Baroness Finch", "color": "Purple"});
+    var check10 = this.Check({"lady": "Madam Natsiou", "heirloom": "Ring"});
+  
+    var check11 = this.Check({"color": "Red", "drink": "Absinthe"});
+ 
+    return check1 && check2 && check3 && check4 && check5 && check6 && check7 && check8 && check9 && check10 && check11;
   }
 }
 
@@ -119,6 +135,7 @@ class SolutionCandidate {
         this.originPermutation = originPermutation;
         this.drinkPermutation = drinkPermutation;
         this.heirloomPermutation = heirloomPermutation;
+        this._horizontalSlices = [];
     }
     
     Printable(property, i){
@@ -144,6 +161,23 @@ class SolutionCandidate {
                                           this.drinkPermutation.at(i),
                                           this.heirloomPermutation.at(i));
       return newSlice;
+    }
+    
+    CheckSolution(){
+      this._horizontalSlices = [];
+      for (var i=0;i<5;i++) {
+        this._horizontalSlices.push(this.CreateSlice(i));
+      }
+      
+      
+      for (var i=0;i<5;i++) {
+        var singleSliceOK = this._horizontalSlices[i].CheckSingleSliceConditions();
+        if (!singleSliceOK) {
+          return false;
+        }
+      }
+      
+      return true;
     }
     
     Print() {
@@ -179,3 +213,5 @@ checkTrue = slice.Check({"lady": "Baroness Finch", "spot": 2});
 
 console.log("CHECK TRUE: ", checkTrue);
 
+checkFalse = solution.CheckSolution();
+console.log("SOLUTION CHECK False: ", checkFalse);
