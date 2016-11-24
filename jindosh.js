@@ -63,6 +63,54 @@ class Permutation {
     }
 }
 
+class HorizontalSlice {
+  constructor(lady, spot, color, origin, drink, heirloom) {
+    this.lady = lady;
+    this.spot = spot;
+    this.color = color;
+    this.origin = origin;
+    this.drink = drink;
+    this.heirloom = heirloom;
+  }
+  
+  Check(checkJSON) {
+    var conditionCheck = [];
+    for (let propIndex in checkJSON) {
+
+      if (!this.hasOwnProperty(propIndex)) {
+        console.error("BAD JSON PROPERTY", propIndex);
+      }
+      if (this[propIndex] === checkJSON[propIndex]) {
+        conditionCheck.push(true);
+      } else {
+        conditionCheck.push(false);
+      }
+    }
+    
+    if (conditionCheck.length === 0){
+      return true;
+    }
+    
+    var and_check = conditionCheck[0];
+    var or_check = conditionCheck[0];
+    
+    for (var k=1;k<conditionCheck.length;k++){
+      and_check = and_check && conditionCheck[k];
+      or_check = or_check || conditionCheck[k];
+    }
+    
+    if (and_check === or_check) {
+      return true;
+    } else {
+      return false;
+    }
+    
+  }
+  CheckSingleSliceConditions() {
+    
+  }
+}
+
 class SolutionCandidate {
     constructor(ladyPermutation, spotPermutation, colorPermutation, originPermutation, drinkPermutation, heirloomPermutation) {
         this.ladyPermutation = ladyPermutation;
@@ -76,20 +124,32 @@ class SolutionCandidate {
     Printable(property, i){
         
     }
+    
+    PrintSlice(i) {
+      var fullToPrint = "";
+      fullToPrint += this.ladyPermutation.printable_at(i);
+      fullToPrint += this.spotPermutation.printable_at(i);
+      fullToPrint += this.colorPermutation.printable_at(i);
+      fullToPrint += this.originPermutation.printable_at(i);
+      fullToPrint += this.drinkPermutation.printable_at(i);
+      fullToPrint += this.heirloomPermutation.printable_at(i);
+      
+      console.log(fullToPrint);
+    }
+    CreateSlice(i){
+      const newSlice = new HorizontalSlice(this.ladyPermutation.at(i),
+                                          this.spotPermutation.at(i),
+                                          this.colorPermutation.at(i),
+                                          this.originPermutation.at(i),
+                                          this.drinkPermutation.at(i),
+                                          this.heirloomPermutation.at(i));
+      return newSlice;
+    }
+    
     Print() {
      for (var i=0;i<5;i++) {
-         
-        var fullToPrint = "";
-        fullToPrint += this.ladyPermutation.printable_at(i);
-        fullToPrint += this.spotPermutation.printable_at(i);
-        fullToPrint += this.colorPermutation.printable_at(i);
-        fullToPrint += this.originPermutation.printable_at(i);
-        fullToPrint += this.drinkPermutation.printable_at(i);
-        fullToPrint += this.heirloomPermutation.printable_at(i);
-        
-        console.log(fullToPrint);
-        // console.log(this.ladyPermutation.at(i) + "\t" + this.spotPermutation.at(i) + "\t" + this.colorPermutation.at(i) + "\t" +this.originPermutation.at(i) + "\t" + this.drinkPermutation.at(i) + "\t" + this.heirloomPermutation.at(i));
-     }   
+        this.PrintSlice(i);
+       }   
     }
     
 }
@@ -104,4 +164,18 @@ const hp = new Permutation(heirloomArray, noPermutationIndexArray);
 const solution = new SolutionCandidate(lp, sp, cp, op, dp, hp);
 
 solution.Print();
+
+const slice = solution.CreateSlice(0);
+
+//slice.CheckSliceConditions();
+
+var checkTrue = slice.Check({"lady": "Doctor Marcolla", "spot": 1});
+
+console.log("CHECK TRUE: ", checkTrue);
+var checkFalse = slice.Check({"lady": "Doctor Marcolla", "spot": 2});
+
+console.log("CHECK False: ", checkFalse);
+checkTrue = slice.Check({"lady": "Baroness Finch", "spot": 2});
+
+console.log("CHECK TRUE: ", checkTrue);
 
