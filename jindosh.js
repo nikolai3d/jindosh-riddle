@@ -2,7 +2,7 @@
 
 const allcombinations = require('allcombinations')
  
-console.log(Array.from(allcombinations([0, 1, 2, 3, 4])));
+//console.log(Array.from(allcombinations([0, 1, 2, 3, 4])));
 
 const noPermutationIndexArray = [0, 1, 2, 3, 4];
 
@@ -215,3 +215,49 @@ console.log("CHECK TRUE: ", checkTrue);
 
 checkFalse = solution.CheckSolution();
 console.log("SOLUTION CHECK False: ", checkFalse);
+
+
+const kPossibleFivePermutations = Array.from(allcombinations([0, 1, 2, 3, 4]));
+
+const total = Math.pow(kPossibleFivePermutations.length, 6);
+console.log("Total space to check: ", total);
+let current = 0.0;
+
+for (var ladyPermutation of kPossibleFivePermutations){
+
+  const lp = new Permutation(ladyArray, ladyPermutation);
+
+  for (var spotPermutation of kPossibleFivePermutations){
+    const sp = new Permutation(spotArray, spotPermutation);
+  
+    for (var colorPermutation of kPossibleFivePermutations){
+      const cp = new Permutation(colorArray, colorPermutation);
+      
+      for (var originPermutation of kPossibleFivePermutations){
+        const op = new Permutation(originArray, originPermutation);
+ 
+        for (var drinkPermutation of kPossibleFivePermutations){
+          const dp = new Permutation(drinkArray, drinkPermutation);
+
+          for (var heirloomPermutation of kPossibleFivePermutations){
+            const hp = new Permutation(heirloomArray, heirloomPermutation);
+
+            const solution = new SolutionCandidate(lp, sp, cp, op, dp, hp);
+
+            const valid = solution.CheckSolution();
+            
+            current = current + 1.0;
+            if (current % 100000 === 0){
+              console.log("Percentage: ", (current/total)*100, "%");
+            }
+            if (valid) {
+              solution.Print();
+              process.exit(0);
+            }    
+          }
+        }
+ 
+      }
+    }
+  }
+}
