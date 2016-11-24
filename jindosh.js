@@ -68,8 +68,32 @@ class Permutation {
     }
 }
 
+const gSingleSliceConditions = [
+  {"lady": "Doctor Marcolla", "spot": 1},
+  {"spot": 2, "color": "White"},
+  {"spot": 3, "drink": "Wine"},
+  {"lady": "Countess Contee", "drink": "Beer"},
+  {"color": "Green", "origin": "Karnaca"},
+  {"origin": "Dunwall", "drink": "Whiskey"},
+  {"origin": "Fraeport", "heirloom": "Diamond"},
+  {"lady": "Lady Winslow", "origin": "Baleton"},
+  {"lady": "Baroness Finch", "color": "Purple"},
+  {"lady": "Madam Natsiou", "heirloom": "Ring"},
+  {"color": "Red", "drink": "Absinthe"}
+  ];
+  
 class HorizontalSlice {
-  constructor(lady, spot, color, origin, drink, heirloom) {
+  
+  constructor() {
+    this.lady = null;
+    this.spot = null;
+    this.color = null;
+    this.origin = null;
+    this.drink = null;
+    this.heirloom = null;
+  }
+  
+  set(lady, spot, color, origin, drink, heirloom) {
     this.lady = lady;
     this.spot = spot;
     this.color = color;
@@ -77,6 +101,8 @@ class HorizontalSlice {
     this.drink = drink;
     this.heirloom = heirloom;
   }
+  
+  
   
   Check(checkJSON) {
     var conditionCheck = [];
@@ -113,22 +139,13 @@ class HorizontalSlice {
   }
   
   CheckSingleSliceConditions() {
-    
-    var check1 = this.Check({"lady": "Doctor Marcolla", "spot": 1});
-    var check2 = this.Check({"spot": 2, "color": "White"});
-    var check3 = this.Check({"spot": 3, "drink": "Wine"});
-    var check4 = this.Check({"lady": "Countess Contee", "drink": "Beer"});
-    var check5 = this.Check({"color": "Green", "origin": "Karnaca"});
-    var check6 = this.Check({"origin": "Dunwall", "drink": "Whiskey"});
-    var check7 = this.Check({"origin": "Fraeport", "heirloom": "Diamond"});
-    
-    var check8 = this.Check({"lady": "Lady Winslow", "origin": "Baleton"});
-    var check9 = this.Check({"lady": "Baroness Finch", "color": "Purple"});
-    var check10 = this.Check({"lady": "Madam Natsiou", "heirloom": "Ring"});
-  
-    var check11 = this.Check({"color": "Red", "drink": "Absinthe"});
- 
-    return check1 && check2 && check3 && check4 && check5 && check6 && check7 && check8 && check9 && check10 && check11;
+    var check = false;
+    for (var condition of gSingleSliceConditions) {
+      check = this.Check(condition);
+        if (!check) return false;
+    }
+
+    return true; 
   }
 }
 
@@ -140,6 +157,7 @@ class SolutionCandidate {
         this.originPermutation = null;
         this.drinkPermutation = null;
         this.heirloomPermutation = null;
+        this._horizontalSlice = new HorizontalSlice();
     }
 
     set(ladyPermutation, spotPermutation, colorPermutation, originPermutation, drinkPermutation, heirloomPermutation) {
@@ -166,28 +184,23 @@ class SolutionCandidate {
       
       console.log(fullToPrint);
     }
-    CreateSlice(i){
-      const newSlice = new HorizontalSlice(this.ladyPermutation.at(i),
-                                          this.spotPermutation.at(i),
-                                          this.colorPermutation.at(i),
-                                          this.originPermutation.at(i),
-                                          this.drinkPermutation.at(i),
-                                          this.heirloomPermutation.at(i));
-      return newSlice;
-    }
+
     
     CheckSolution(){
-      this._horizontalSlices = [];
+
       for (var i=0;i<5;i++) {
-        this._horizontalSlices.push(this.CreateSlice(i));
-      }
-      
-      
-      for (var i=0;i<5;i++) {
-        var singleSliceOK = this._horizontalSlices[i].CheckSingleSliceConditions();
+        this._horizontalSlice.set(this.ladyPermutation.at(i),
+                                    this.spotPermutation.at(i),
+                                    this.colorPermutation.at(i),
+                                    this.originPermutation.at(i),
+                                    this.drinkPermutation.at(i),
+                                    this.heirloomPermutation.at(i));
+                                    
+      var singleSliceOK = this._horizontalSlice.CheckSingleSliceConditions();
         if (!singleSliceOK) {
           return false;
         }
+  
       }
       
       return true;
