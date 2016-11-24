@@ -269,6 +269,7 @@ const op = new Permutation();
 const dp = new Permutation();
 const hp = new Permutation();
 const solution = new SolutionCandidate();
+const singleSliceValidSolutions = [];
 
 sp.set(spotArray, noPermutationIndexArray);
 
@@ -296,7 +297,7 @@ for (var ladyPermutation of kPossibleFivePermutations){
             const valid = solution.CheckSolution();
 
             current = current + 1.0;
-            if (current % 1000000 === 0){
+            if (current % 10000000 === 0){
 
               var sample = new Date().getTime();
               var elapsedMS = sample - start;
@@ -314,7 +315,14 @@ for (var ladyPermutation of kPossibleFivePermutations){
             if (valid) {
               successCount = successCount + 1;
               solution.Print();
+              console.log("\n");
               solution.AsyncWrite("./solution"+successCount.toString()+".json");
+              
+              const validSolution = new SolutionCandidate();
+              validSolution.set(lp, sp, cp, op, dp, hp);
+              singleSliceValidSolutions.push(validSolution);
+              
+              fs.writeFileSync("./validSolutions.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
             }    
           }
         }
@@ -323,3 +331,5 @@ for (var ladyPermutation of kPossibleFivePermutations){
     }
   }
 }
+
+process.exit(0);
