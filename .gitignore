@@ -1,0 +1,7 @@
+node_modules/
+.c9/
+build/
+build/*.js
+.DS_Store
+.env
+.service_account.json
