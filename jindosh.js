@@ -1,7 +1,7 @@
 'use strict';
 
 const allcombinations = require('allcombinations')
- 
+const fs = require('fs');
 //console.log(Array.from(allcombinations([0, 1, 2, 3, 4])));
 
 const noPermutationIndexArray = [0, 1, 2, 3, 4];
@@ -186,8 +186,15 @@ class SolutionCandidate {
        }   
     }
     
+    WriteSlices(name) {
+      fs.appendFileSync(name, JSON.stringify(this)+"\n","utf-8", function(err) { console.log("WRITTEN",err);});
+    }
+    AsyncWrite(name) {
+      fs.appendFileSync(name, JSON.stringify(this)+"\n","utf-8", function(err) { console.log("WRITTEN",err);});
+    }
 }
 
+{
 const lp = new Permutation(ladyArray, noPermutationIndexArray);
 const sp = new Permutation(spotArray, noPermutationIndexArray);
 const cp = new Permutation(colorArray, noPermutationIndexArray);
@@ -216,19 +223,23 @@ console.log("CHECK TRUE: ", checkTrue);
 checkFalse = solution.CheckSolution();
 console.log("SOLUTION CHECK False: ", checkFalse);
 
+solution.AsyncWrite("./test.json");
+}
 
 const kPossibleFivePermutations = Array.from(allcombinations([0, 1, 2, 3, 4]));
 
-const total = Math.pow(kPossibleFivePermutations.length, 6);
+const total = Math.pow(kPossibleFivePermutations.length, 5);
 console.log("Total space to check: ", total);
 let current = 0.0;
+let successCount = 0;
+const sp = new Permutation(spotArray, noPermutationIndexArray);
 
 for (var ladyPermutation of kPossibleFivePermutations){
 
   const lp = new Permutation(ladyArray, ladyPermutation);
 
-  for (var spotPermutation of kPossibleFivePermutations){
-    const sp = new Permutation(spotArray, spotPermutation);
+  //for (var spotPermutation of kPossibleFivePermutations)
+  {
   
     for (var colorPermutation of kPossibleFivePermutations){
       const cp = new Permutation(colorArray, colorPermutation);
@@ -245,14 +256,16 @@ for (var ladyPermutation of kPossibleFivePermutations){
             const solution = new SolutionCandidate(lp, sp, cp, op, dp, hp);
 
             const valid = solution.CheckSolution();
-            
+
             current = current + 1.0;
-            if (current % 100000 === 0){
+            if (current % 1000000 === 0){
               console.log("Percentage: ", (current/total)*100, "%");
             }
+            
             if (valid) {
+              successCount = successCount + 1;
               solution.Print();
-              process.exit(0);
+              solution.AsyncWrite("./solution"+successCount.toString()+".json");
             }    
           }
         }
