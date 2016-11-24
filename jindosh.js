@@ -306,17 +306,18 @@ for (var ladyPermutation of kPossibleFivePermutations){
               var remainingCalcMS = (total - current) * perCalcMS;
               
               console.log("Percentage: ", (current/total)*100, "%");
+              console.log("Solutions Found: ", successCount);
               console.log("Elapsed Time: ", Math.round(elapsedMS/(1000)), " sec");
               console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60)), " min");
               console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60*60)), " hrs");
-              console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60*60*24)), " days");
+
             }
             
             if (valid) {
               successCount = successCount + 1;
               solution.Print();
-              console.log("\n");
-              solution.AsyncWrite("./solution"+successCount.toString()+".json");
+              console.log("==");
+              //solution.AsyncWrite("./solution"+successCount.toString()+".json");
               
               const validSolution = new SolutionCandidate();
               validSolution.set(lp, sp, cp, op, dp, hp);
