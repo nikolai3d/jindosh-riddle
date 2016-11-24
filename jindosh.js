@@ -234,6 +234,11 @@ let current = 0.0;
 let successCount = 0;
 const sp = new Permutation(spotArray, noPermutationIndexArray);
 
+
+var start = new Date().getTime();
+
+
+
 for (var ladyPermutation of kPossibleFivePermutations){
 
   const lp = new Permutation(ladyArray, ladyPermutation);
@@ -259,7 +264,18 @@ for (var ladyPermutation of kPossibleFivePermutations){
 
             current = current + 1.0;
             if (current % 1000000 === 0){
+
+              var sample = new Date().getTime();
+              var elapsedMS = sample - start;
+              
+              var perCalcMS = elapsedMS/current;
+              var remainingCalcMS = (total - current) * perCalcMS;
+              
               console.log("Percentage: ", (current/total)*100, "%");
+              console.log("Elapsed Time: ", Math.round(elapsedMS/(1000)), " sec");
+              console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60)), " min");
+              console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60*60)), " hrs");
+              console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60*60*24)), " days");
             }
             
             if (valid) {
