@@ -41,7 +41,12 @@ const heirloomArray = [ "Snuff Tin",
     
 
 class Permutation {
-    constructor(itemsArray, indicesArray) {
+    constructor() {
+      this.itemsArray = [];
+      this.indicesArray = [];
+    }
+
+    set(itemsArray, indicesArray) {
       this.itemsArray = itemsArray;
       this.indicesArray = indicesArray;
     }
@@ -128,14 +133,22 @@ class HorizontalSlice {
 }
 
 class SolutionCandidate {
-    constructor(ladyPermutation, spotPermutation, colorPermutation, originPermutation, drinkPermutation, heirloomPermutation) {
+   constructor() {
+        this.ladyPermutation = null;
+        this.spotPermutation = null;
+        this.colorPermutation = null;
+        this.originPermutation = null;
+        this.drinkPermutation = null;
+        this.heirloomPermutation = null;
+    }
+
+    set(ladyPermutation, spotPermutation, colorPermutation, originPermutation, drinkPermutation, heirloomPermutation) {
         this.ladyPermutation = ladyPermutation;
         this.spotPermutation = spotPermutation;
         this.colorPermutation = colorPermutation;
         this.originPermutation = originPermutation;
         this.drinkPermutation = drinkPermutation;
         this.heirloomPermutation = heirloomPermutation;
-        this._horizontalSlices = [];
     }
     
     Printable(property, i){
@@ -194,37 +207,37 @@ class SolutionCandidate {
     }
 }
 
-{
-const lp = new Permutation(ladyArray, noPermutationIndexArray);
-const sp = new Permutation(spotArray, noPermutationIndexArray);
-const cp = new Permutation(colorArray, noPermutationIndexArray);
-const op = new Permutation(originArray, noPermutationIndexArray);
-const dp = new Permutation(drinkArray, noPermutationIndexArray);
-const hp = new Permutation(heirloomArray, noPermutationIndexArray);
+// {
+// const lp = new Permutation(ladyArray, noPermutationIndexArray);
+// const sp = new Permutation(spotArray, noPermutationIndexArray);
+// const cp = new Permutation(colorArray, noPermutationIndexArray);
+// const op = new Permutation(originArray, noPermutationIndexArray);
+// const dp = new Permutation(drinkArray, noPermutationIndexArray);
+// const hp = new Permutation(heirloomArray, noPermutationIndexArray);
 
-const solution = new SolutionCandidate(lp, sp, cp, op, dp, hp);
+// const solution = new SolutionCandidate(lp, sp, cp, op, dp, hp);
 
-solution.Print();
+// solution.Print();
 
-const slice = solution.CreateSlice(0);
+// const slice = solution.CreateSlice(0);
 
-//slice.CheckSliceConditions();
+// //slice.CheckSliceConditions();
 
-var checkTrue = slice.Check({"lady": "Doctor Marcolla", "spot": 1});
+// var checkTrue = slice.Check({"lady": "Doctor Marcolla", "spot": 1});
 
-console.log("CHECK TRUE: ", checkTrue);
-var checkFalse = slice.Check({"lady": "Doctor Marcolla", "spot": 2});
+// console.log("CHECK TRUE: ", checkTrue);
+// var checkFalse = slice.Check({"lady": "Doctor Marcolla", "spot": 2});
 
-console.log("CHECK False: ", checkFalse);
-checkTrue = slice.Check({"lady": "Baroness Finch", "spot": 2});
+// console.log("CHECK False: ", checkFalse);
+// checkTrue = slice.Check({"lady": "Baroness Finch", "spot": 2});
 
-console.log("CHECK TRUE: ", checkTrue);
+// console.log("CHECK TRUE: ", checkTrue);
 
-checkFalse = solution.CheckSolution();
-console.log("SOLUTION CHECK False: ", checkFalse);
+// checkFalse = solution.CheckSolution();
+// console.log("SOLUTION CHECK False: ", checkFalse);
 
-solution.AsyncWrite("./test.json");
-}
+// solution.AsyncWrite("./test.json");
+// }
 
 const kPossibleFivePermutations = Array.from(allcombinations([0, 1, 2, 3, 4]));
 
@@ -232,33 +245,40 @@ const total = Math.pow(kPossibleFivePermutations.length, 5);
 console.log("Total space to check: ", total);
 let current = 0.0;
 let successCount = 0;
-const sp = new Permutation(spotArray, noPermutationIndexArray);
-
 
 var start = new Date().getTime();
 
 
+const sp = new Permutation();
+const lp = new Permutation();
+const cp = new Permutation();
+const op = new Permutation();
+const dp = new Permutation();
+const hp = new Permutation();
+const solution = new SolutionCandidate();
+
+sp.set(spotArray, noPermutationIndexArray);
 
 for (var ladyPermutation of kPossibleFivePermutations){
 
-  const lp = new Permutation(ladyArray, ladyPermutation);
+  lp.set(ladyArray, ladyPermutation);
 
   //for (var spotPermutation of kPossibleFivePermutations)
   {
   
     for (var colorPermutation of kPossibleFivePermutations){
-      const cp = new Permutation(colorArray, colorPermutation);
+      cp.set(colorArray, colorPermutation);
       
       for (var originPermutation of kPossibleFivePermutations){
-        const op = new Permutation(originArray, originPermutation);
+        op.set(originArray, originPermutation);
  
         for (var drinkPermutation of kPossibleFivePermutations){
-          const dp = new Permutation(drinkArray, drinkPermutation);
+          dp.set(drinkArray, drinkPermutation);
 
           for (var heirloomPermutation of kPossibleFivePermutations){
-            const hp = new Permutation(heirloomArray, heirloomPermutation);
+            hp.set(heirloomArray, heirloomPermutation);
 
-            const solution = new SolutionCandidate(lp, sp, cp, op, dp, hp);
+            solution.set(lp, sp, cp, op, dp, hp);
 
             const valid = solution.CheckSolution();
 
