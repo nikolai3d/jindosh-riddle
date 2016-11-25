@@ -156,6 +156,49 @@ class HorizontalSlice {
   }
 }
 
+function FindSliceBy(iSliceArray, keyValPair){
+  
+  const keyValPairArray =  Object.keys(keyValPair)
+  
+  if (keyValPairArray.length!==1) {
+    throw new Error("Can only search slices by one key");
+  }
+  
+  const key = keyValPairArray[0];
+  const valueToSearch = keyValPair[key];
+  
+  const resultSlice = null;
+  
+     for (var slice of iSliceArray) {
+     if (!slice.hasOwnProperty(key)) {
+        throw new Error("Bad Key " + key + ", Slice Doesn't have it");
+      }
+      if (slice[key] === valueToSearch) {
+        return slice;
+      }
+     }
+  
+  throw new Error("Cannot find slice by keyval "+JSON.stringify(keyValPair), " bad value or bad slice array");
+}
+
+function CheckAdjacencyConditions(iSliceArray){
+  if (iSliceArray.length !== 5) {
+    throw new Error("Bad Solution Slice Array");
+  }
+  
+  //The lady in red sat to the left of someone in blue
+  const ladyInRed = FindSliceBy(iSliceArray, {"color": "Red"});
+  const ladyInBlue = FindSliceBy(iSliceArray, {"color": "Blue"});
+  
+  console.log("Red spot: ", ladyInRed.spot, "Blue spot: ", ladyInBlue.spot);
+  if (ladyInRed.spot >= ladyInBlue.spot) {
+    return false; 
+  }
+  
+  return true;
+  
+}
+
 class SolutionCandidate {
    constructor() {
         this.ladyPermutation = null;
@@ -230,6 +273,26 @@ class SolutionCandidate {
       
       return true;
     }
+    
+    
+    CheckAdjacencyConditions() {
+      // this.Print();
+      const sliceArray = [];
+      for (var i=0;i<5;i++) {
+        const newSlice = new HorizontalSlice();
+        newSlice.set(this.ladyPermutation.at(i),
+                     this.spotPermutation.at(i),
+                     this.colorPermutation.at(i),
+                     this.originPermutation.at(i),
+                     this.drinkPermutation.at(i),
+                     this.heirloomPermutation.at(i));
+                                    
+        sliceArray.push(newSlice);
+        
+      }
+      return CheckAdjacencyConditions(sliceArray);    
+    }
+    
     
     Print() {
      for (var i=0;i<5;i++) {
@@ -346,9 +409,9 @@ function ComputeSingleSliceValidSolutions() {
                 console.log("==");
                 //solution.AsyncWrite("./solution"+successCount.toString()+".json");
                 
-                const validSolution = new SolutionCandidate();
-                validSolution.set(lp, sp, cp, op, dp, hp);
-                singleSliceValidSolutions.push(validSolution);
+                const solutionDataDeepCopy = JSON.parse(JSON.stringify(solution));
+                
+                singleSliceValidSolutions.push(solutionDataDeepCopy);
                 
                 fs.writeFileSync("./validSolutions.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
               }    
@@ -373,6 +436,8 @@ function ReadValidSolutions() {
  
     solutionObject.set_from_parsed_json(solution);
     singleSliceValidSolutions.push(solutionObject);
+    
+    solutionObject.Print();
   }
   
   return singleSliceValidSolutions;
@@ -391,9 +456,25 @@ function RecheckSingleSliceValidSolutions(iSingleSliceValidSolutions){
   }
 }
 
-//ComputeSingleSliceValidSolutions();
+function CheckSolutionsAdjacencyConditions(iSingleSliceValidSolutions){
+  for (var solution of iSingleSliceValidSolutions) {
+    const valid = solution.CheckAdjacencyConditions();
+    
+    if (valid) {
+      console.log("Adjacency Solution Valid");
+    }
+    else { 
+      console.error("Adjacency Solution check INVALID");
+    }
+  }
+}
 
-const precomputedSolutions = ReadValidSolutions();
-RecheckSingleSliceValidSolutions(precomputedSolutions);
+ComputeSingleSliceValidSolutions();
+
+//const precomputedSolutions = ReadValidSolutions();
+
+//RecheckSingleSliceValidSolutions(precomputedSolutions);
+
+//CheckSolutionsAdjacencyConditions(precomputedSolutions);
 
 process.exit(0);
