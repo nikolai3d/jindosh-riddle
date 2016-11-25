@@ -66,6 +66,13 @@ class Permutation {
         }
         return toPrint;
     }
+    
+    set_from_parsed_json(iData){
+
+      this.itemsArray = iData.itemsArray;
+      this.indicesArray = iData.indicesArray;
+
+    }
 }
 
 const gSingleSliceConditions = [
@@ -169,8 +176,26 @@ class SolutionCandidate {
         this.heirloomPermutation = heirloomPermutation;
     }
     
-    Printable(property, i){
-        
+    set_from_parsed_json(iData){
+      const ladyPermutation = new Permutation(); 
+      ladyPermutation.set_from_parsed_json(iData.ladyPermutation);
+      
+      const spotPermutation = new Permutation(); 
+      spotPermutation.set_from_parsed_json(iData.spotPermutation);
+      
+      const colorPermutation = new Permutation(); 
+      colorPermutation.set_from_parsed_json(iData.colorPermutation);
+      
+      const originPermutation = new Permutation(); 
+      originPermutation.set_from_parsed_json(iData.originPermutation);
+      
+      const drinkPermutation = new Permutation(); 
+      drinkPermutation.set_from_parsed_json(iData.drinkPermutation);
+      
+      const heirloomPermutation = new Permutation();  
+      heirloomPermutation.set_from_parsed_json(iData.heirloomPermutation);
+      
+      this.set(ladyPermutation, spotPermutation, colorPermutation, originPermutation, drinkPermutation, heirloomPermutation);
     }
     
     PrintSlice(i) {
@@ -252,85 +277,123 @@ class SolutionCandidate {
 // solution.AsyncWrite("./test.json");
 // }
 
-const kPossibleFivePermutations = Array.from(allcombinations([0, 1, 2, 3, 4]));
 
-const total = Math.pow(kPossibleFivePermutations.length, 5);
-console.log("Total space to check: ", total);
-let current = 0.0;
-let successCount = 0;
+function ComputeSingleSliceValidSolutions() {
+  const kPossibleFivePermutations = Array.from(allcombinations([0, 1, 2, 3, 4]));
 
-var start = new Date().getTime();
-
-
-const sp = new Permutation();
-const lp = new Permutation();
-const cp = new Permutation();
-const op = new Permutation();
-const dp = new Permutation();
-const hp = new Permutation();
-const solution = new SolutionCandidate();
-const singleSliceValidSolutions = [];
-
-sp.set(spotArray, noPermutationIndexArray);
-
-for (var ladyPermutation of kPossibleFivePermutations){
-
-  lp.set(ladyArray, ladyPermutation);
-
-  //for (var spotPermutation of kPossibleFivePermutations)
-  {
+  const total = Math.pow(kPossibleFivePermutations.length, 5);
+  console.log("Total space to check: ", total);
+  let current = 0.0;
+  let successCount = 0;
   
-    for (var colorPermutation of kPossibleFivePermutations){
-      cp.set(colorArray, colorPermutation);
-      
-      for (var originPermutation of kPossibleFivePermutations){
-        op.set(originArray, originPermutation);
- 
-        for (var drinkPermutation of kPossibleFivePermutations){
-          dp.set(drinkArray, drinkPermutation);
-
-          for (var heirloomPermutation of kPossibleFivePermutations){
-            hp.set(heirloomArray, heirloomPermutation);
-
-            solution.set(lp, sp, cp, op, dp, hp);
-
-            const valid = solution.CheckSolution();
-
-            current = current + 1.0;
-            if (current % 10000000 === 0){
-
-              var sample = new Date().getTime();
-              var elapsedMS = sample - start;
+  var start = new Date().getTime();
+  
+  
+  const sp = new Permutation();
+  const lp = new Permutation();
+  const cp = new Permutation();
+  const op = new Permutation();
+  const dp = new Permutation();
+  const hp = new Permutation();
+  const solution = new SolutionCandidate();
+  const singleSliceValidSolutions = [];
+  
+  sp.set(spotArray, noPermutationIndexArray);
+  
+  for (var ladyPermutation of kPossibleFivePermutations){
+  
+    lp.set(ladyArray, ladyPermutation);
+  
+    //for (var spotPermutation of kPossibleFivePermutations)
+    {
+    
+      for (var colorPermutation of kPossibleFivePermutations){
+        cp.set(colorArray, colorPermutation);
+        
+        for (var originPermutation of kPossibleFivePermutations){
+          op.set(originArray, originPermutation);
+   
+          for (var drinkPermutation of kPossibleFivePermutations){
+            dp.set(drinkArray, drinkPermutation);
+  
+            for (var heirloomPermutation of kPossibleFivePermutations){
+              hp.set(heirloomArray, heirloomPermutation);
+  
+              solution.set(lp, sp, cp, op, dp, hp);
+  
+              const valid = solution.CheckSolution();
+  
+              current = current + 1.0;
+              if (current % 10000000 === 0){
+  
+                var sample = new Date().getTime();
+                var elapsedMS = sample - start;
+                
+                var perCalcMS = elapsedMS/current;
+                var remainingCalcMS = (total - current) * perCalcMS;
+                
+                console.log("Percentage: ", (current/total)*100, "%");
+                console.log("Solutions Found: ", successCount);
+                console.log("Elapsed Time: ", Math.round(elapsedMS/(1000)), " sec");
+                console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60)), " min");
+                console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60*60)), " hrs");
+  
+              }
               
-              var perCalcMS = elapsedMS/current;
-              var remainingCalcMS = (total - current) * perCalcMS;
-              
-              console.log("Percentage: ", (current/total)*100, "%");
-              console.log("Solutions Found: ", successCount);
-              console.log("Elapsed Time: ", Math.round(elapsedMS/(1000)), " sec");
-              console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60)), " min");
-              console.log("Remaining Time: ", Math.round(remainingCalcMS/(1000*60*60)), " hrs");
-
+              if (valid) {
+                successCount = successCount + 1;
+                solution.Print();
+                console.log("==");
+                //solution.AsyncWrite("./solution"+successCount.toString()+".json");
+                
+                const validSolution = new SolutionCandidate();
+                validSolution.set(lp, sp, cp, op, dp, hp);
+                singleSliceValidSolutions.push(validSolution);
+                
+                fs.writeFileSync("./validSolutions.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
+              }    
             }
-            
-            if (valid) {
-              successCount = successCount + 1;
-              solution.Print();
-              console.log("==");
-              //solution.AsyncWrite("./solution"+successCount.toString()+".json");
-              
-              const validSolution = new SolutionCandidate();
-              validSolution.set(lp, sp, cp, op, dp, hp);
-              singleSliceValidSolutions.push(validSolution);
-              
-              fs.writeFileSync("./validSolutions.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
-            }    
           }
         }
- 
       }
     }
   }
+
+  return singleSliceValidSolutions;
 }
+
+function ReadValidSolutions() {
+  const fileContentString = fs.readFileSync("./validSolutions.json", { encoding: "utf-8", flag: 'r'});
+  const arrayData = JSON.parse(fileContentString);
+ 
+  const singleSliceValidSolutions = [];
+  for (var solution of arrayData) {
+    const solutionObject = new SolutionCandidate();
+    
+ 
+    solutionObject.set_from_parsed_json(solution);
+    singleSliceValidSolutions.push(solutionObject);
+  }
+  
+  return singleSliceValidSolutions;
+}
+
+function RecheckSingleSliceValidSolutions(iSingleSliceValidSolutions){
+  for (var solution of iSingleSliceValidSolutions) {
+    const valid = solution.CheckSolution();
+    
+    if (valid) {
+      console.log("Solution Single-Slice Valid");
+    }
+    else { 
+      console.error("Solution Single-Slice invalid error! Bad Input");
+    }
+  }
+}
+
+//ComputeSingleSliceValidSolutions();
+
+const precomputedSolutions = ReadValidSolutions();
+RecheckSingleSliceValidSolutions(precomputedSolutions);
 
 process.exit(0);
