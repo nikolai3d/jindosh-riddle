@@ -436,8 +436,6 @@ function ReadValidSolutions() {
  
     solutionObject.set_from_parsed_json(solution);
     singleSliceValidSolutions.push(solutionObject);
-    
-    solutionObject.Print();
   }
   
   return singleSliceValidSolutions;
@@ -469,12 +467,12 @@ function CheckSolutionsAdjacencyConditions(iSingleSliceValidSolutions){
   }
 }
 
-ComputeSingleSliceValidSolutions();
+//ComputeSingleSliceValidSolutions();
 
-//const precomputedSolutions = ReadValidSolutions();
+const precomputedSolutions = ReadValidSolutions();
 
 //RecheckSingleSliceValidSolutions(precomputedSolutions);
 
-//CheckSolutionsAdjacencyConditions(precomputedSolutions);
+CheckSolutionsAdjacencyConditions(precomputedSolutions);
 
 process.exit(0);
