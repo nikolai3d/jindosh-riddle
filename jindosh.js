@@ -158,7 +158,7 @@ class HorizontalSlice {
 
 function FindSliceBy(iSliceArray, keyValPair){
   
-  const keyValPairArray =  Object.keys(keyValPair)
+  const keyValPairArray =  Object.keys(keyValPair);
   
   if (keyValPairArray.length!==1) {
     throw new Error("Can only search slices by one key");
@@ -167,16 +167,15 @@ function FindSliceBy(iSliceArray, keyValPair){
   const key = keyValPairArray[0];
   const valueToSearch = keyValPair[key];
   
-  const resultSlice = null;
-  
-     for (var slice of iSliceArray) {
-     if (!slice.hasOwnProperty(key)) {
-        throw new Error("Bad Key " + key + ", Slice Doesn't have it");
-      }
-      if (slice[key] === valueToSearch) {
-        return slice;
-      }
-     }
+ 
+   for (var slice of iSliceArray) {
+    if (!slice.hasOwnProperty(key)) {
+      throw new Error("Bad Key " + key + ", Slice Doesn't have it");
+    }
+    if (slice[key] === valueToSearch) {
+      return slice;
+    }
+   }
   
   throw new Error("Cannot find slice by keyval "+JSON.stringify(keyValPair), " bad value or bad slice array");
 }
@@ -190,10 +189,33 @@ function CheckAdjacencyConditions(iSliceArray){
   const ladyInRed = FindSliceBy(iSliceArray, {"color": "Red"});
   const ladyInBlue = FindSliceBy(iSliceArray, {"color": "Blue"});
   
-  console.log("Red spot: ", ladyInRed.spot, "Blue spot: ", ladyInBlue.spot);
-  if (ladyInRed.spot >= ladyInBlue.spot) {
+  if (ladyInRed.spot - ladyInBlue.spot !== -1) {
     return false; 
   }
+  
+ 
+  //When one of the dinner guests bragged about her War Medal, 
+  //the woman next to her said they were finer in Karnaca where she lived 
+  const ladyWithWarMedal =  FindSliceBy(iSliceArray, {"heirloom": "War Medal"});
+  const ladyFromKarnaca =  FindSliceBy(iSliceArray, {"origin": "Karnaca"});
+
+  if (Math.abs(ladyWithWarMedal.spot-ladyFromKarnaca.spot)!==1){
+    return false;
+  }
+
+  // Someone carried a Bird Pendant, and when she saw it, a visitor from Dabokva next to her almost spiller her neighbour's Rum
+  const ladyFromDabokva =  FindSliceBy(iSliceArray, {"origin": "Dabokva"});
+  const ladyWithRum = FindSliceBy(iSliceArray, {"drink": "Rum"});
+  const ladyWithBirdPendant = FindSliceBy(iSliceArray, {"heirloom":"Bird Pendant"});
+  
+  if (Math.abs(ladyFromDabokva.spot-ladyWithRum.spot)!==1){
+    return false;
+  }
+  
+  if (Math.abs(ladyFromDabokva.spot-ladyWithBirdPendant.spot)!==1){
+    return false;
+  }
+  
   
   return true;
   
@@ -445,11 +467,8 @@ function RecheckSingleSliceValidSolutions(iSingleSliceValidSolutions){
   for (var solution of iSingleSliceValidSolutions) {
     const valid = solution.CheckSolution();
     
-    if (valid) {
-      console.log("Solution Single-Slice Valid");
-    }
-    else { 
-      console.error("Solution Single-Slice invalid error! Bad Input");
+    if (!valid) {
+       console.error("Solution Single-Slice invalid error! Bad Input");
     }
   }
 }
@@ -459,10 +478,8 @@ function CheckSolutionsAdjacencyConditions(iSingleSliceValidSolutions){
     const valid = solution.CheckAdjacencyConditions();
     
     if (valid) {
-      console.log("Adjacency Solution Valid");
-    }
-    else { 
-      console.error("Adjacency Solution check INVALID");
+      console.log("Adjacency Solution Valid, SOLUTION FOUND:");
+      solution.Print();
     }
   }
 }
@@ -471,7 +488,7 @@ function CheckSolutionsAdjacencyConditions(iSingleSliceValidSolutions){
 
 const precomputedSolutions = ReadValidSolutions();
 
-//RecheckSingleSliceValidSolutions(precomputedSolutions);
+RecheckSingleSliceValidSolutions(precomputedSolutions);
 
 CheckSolutionsAdjacencyConditions(precomputedSolutions);
 
