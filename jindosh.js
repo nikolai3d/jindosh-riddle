@@ -363,11 +363,12 @@ class SolutionCandidate {
 // }
 
 
-function ComputeSingleSliceValidSolutions() {
+function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
   const kPossibleFivePermutations = Array.from(allcombinations([0, 1, 2, 3, 4]));
 
-  const total = Math.pow(kPossibleFivePermutations.length, 5);
-  console.log("Total space to check: ", total);
+  const total = Math.pow(kPossibleFivePermutations.length, 5) / totalProcesses;
+  
+  //console.log("Total space to check: ", total);
   let current = 0.0;
   let successCount = 0;
   
@@ -385,8 +386,20 @@ function ComputeSingleSliceValidSolutions() {
   
   sp.set(spotArray, noPermutationIndexArray);
   
-  for (var ladyPermutation of kPossibleFivePermutations){
+  const processSlice = kPossibleFivePermutations.length / totalProcesses;
   
+  if (kPossibleFivePermutations.length % totalProcesses !== 0){
+    throw new Error("Bad Processes Number, doesn't split evenly");
+  }
+  
+  const startIndex = processID*processSlice;
+  const endIndex = processID*processSlice + processSlice - 1;
+  
+  console.log("Indices ", startIndex, "to", endIndex);
+  for (var ladyPermutationIndex = startIndex; ladyPermutationIndex <= endIndex; ladyPermutationIndex += 1){
+    
+    const ladyPermutation = kPossibleFivePermutations[ladyPermutationIndex];
+    
     lp.set(ladyArray, ladyPermutation);
   
     //for (var spotPermutation of kPossibleFivePermutations)
@@ -486,10 +499,41 @@ function CheckSolutionsAdjacencyConditions(iSingleSliceValidSolutions){
 
 //ComputeSingleSliceValidSolutions();
 
-const precomputedSolutions = ReadValidSolutions();
+const numCPUs = require('os').cpus().length;
 
-RecheckSingleSliceValidSolutions(precomputedSolutions);
 
-CheckSolutionsAdjacencyConditions(precomputedSolutions);
 
-process.exit(0);
+const cluster = require('cluster');
+
+if (cluster.isMaster) {
+  // Fork workers.
+  console.log("CPU", numCPUs);
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork({"workerID": i});
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died`);
+  });
+} else {
+  // Workers can share any TCP connection
+  // In this case it is an HTTP server
+  // http.createServer((req, res) => {
+  //   res.writeHead(200);
+  //   res.end('hello world\n');
+  // }).listen(8000);
+
+  
+  console.log("CHILD", cluster.worker.id);
+  
+  ComputeSingleSliceValidSolutions(cluster.worker.id-1, numCPUs);
+  
+}
+
+// const precomputedSolutions = ReadValidSolutions();
+
+// RecheckSingleSliceValidSolutions(precomputedSolutions);
+
+// CheckSolutionsAdjacencyConditions(precomputedSolutions);
+
+//process.exit(0);
