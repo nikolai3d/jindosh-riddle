@@ -460,7 +460,8 @@ function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
     }
   }
 
-  return singleSliceValidSolutions;
+  console.log("Worker "+ processID+" is done.");
+  return;
 }
 
 function ReadValidSolutions() {
@@ -552,6 +553,7 @@ if (cluster.isMaster) {
   
   ComputeSingleSliceValidSolutions(cluster.worker.id-1, numCPUs);
   
+  process.exit(0);
 }
 
 // const precomputedSolutions = ReadValidSolutions();
