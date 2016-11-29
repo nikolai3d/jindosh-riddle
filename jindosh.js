@@ -382,7 +382,6 @@ function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
   const dp = new Permutation();
   const hp = new Permutation();
   const solution = new SolutionCandidate();
-  const singleSliceValidSolutions = [];
   
   sp.set(spotArray, noPermutationIndexArray);
   
@@ -444,11 +443,15 @@ function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
                 console.log("==");
                 //solution.AsyncWrite("./solution"+successCount.toString()+".json");
                 
-                const solutionDataDeepCopy = JSON.parse(JSON.stringify(solution));
+                const solutionDataString = JSON.stringify(solution);
                 
-                singleSliceValidSolutions.push(solutionDataDeepCopy);
+                process.send({ cmd: 'foundSolution', solution : solutionDataString });
+              
+                //const solutionDataDeepCopy = JSON.parse(JSON.stringify(solution));
+              
+                // singleSliceValidSolutions.push(solutionDataDeepCopy);
                 
-                fs.writeFileSync("./validSolutions.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
+                // fs.writeFileSync("./validSolutions.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
               }    
             }
           }
@@ -515,6 +518,27 @@ if (cluster.isMaster) {
   cluster.on('exit', (worker, code, signal) => {
     console.log(`Worker ${worker.process.pid} died`);
   });
+  
+
+  
+  const singleSliceValidSolutions = [];
+ 
+  function messageHandler(msg) {
+    if (msg.cmd && msg.cmd == 'foundSolution') {
+       const solutionDataDeepCopy = JSON.parse(msg.solution);
+            
+      singleSliceValidSolutions.push(solutionDataDeepCopy);
+      console.log("GOT SOLUTION");
+      fs.writeFileSync("./validSolutionsParallel.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
+    }
+  }
+  
+    
+   Object.keys(cluster.workers).forEach((id) => {
+    cluster.workers[id].on('message', messageHandler);
+  });
+  console.log("Master setup complete");
+  
 } else {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
