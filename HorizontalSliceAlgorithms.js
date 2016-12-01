@@ -26,23 +26,5 @@ function CheckSingleSliceConditions(iHorizontalSlice) {
 
 /* iSliceObject - preallocated HorizontalSlice Object */
 
-function CheckSingleSliceConditionsOfSolution(iSliceObject, iSolutionCandidate){
- 
-   for (var i=0;i<5;i++) {
-     iSliceObject.set(iSolutionCandidate.ladyPermutation.at(i),
-                      iSolutionCandidate.spotPermutation.at(i),
-                      iSolutionCandidate.colorPermutation.at(i),
-                      iSolutionCandidate.originPermutation.at(i),
-                      iSolutionCandidate.drinkPermutation.at(i),
-                      iSolutionCandidate.heirloomPermutation.at(i));
-                      
-   var singleSliceOK = CheckSingleSliceConditions(iSliceObject);
-     if (!singleSliceOK) {
-       return false;
-     }
-   }
-   
-   return true;
-}
 
 module.exports = {CheckSingleSliceConditions};

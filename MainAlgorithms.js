@@ -3,7 +3,7 @@ const Permutation = require("./Permutation").Permutation;
 const HorizontalSlice = require("./HorizontalSlice").HorizontalSlice;
 const SolutionCandidate = require("./SolutionCandidate").SolutionCandidate;
 const allcombinations = require('allcombinations');
-const CheckSingleSliceConditionsOfSolution = require("./HorizontalSliceAlgorithms").CheckSingleSliceConditionsOfSolution;
+const CheckSingleSliceConditionsOfSolution = require("./SolutionCandidateAlgorithms").CheckSingleSliceConditionsOfSolution;
 
 const noPermutationIndexArray = [0, 1, 2, 3, 4];
 

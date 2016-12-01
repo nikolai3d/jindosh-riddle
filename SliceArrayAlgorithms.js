@@ -1,5 +1,5 @@
 'use strict';
-const HorizontalSlice = require("./HorizontalSlice").HorizontalSlice;
+
 
 function FindSliceBy(iSliceArray, keyValPair){
   
@@ -64,21 +64,6 @@ function CheckAdjacencyConditions(iSliceArray){
   return true;
 }
 
-function CheckAdjacencyConditionsOfSolution(iSolutionCandidate){
-  const sliceArray = [];
-   for (var i=0;i<5;i++) {
-     const newSlice = new HorizontalSlice();
-     newSlice.set(iSolutionCandidate.ladyPermutation.at(i),
-                  iSolutionCandidate.spotPermutation.at(i),
-                  iSolutionCandidate.colorPermutation.at(i),
-                  iSolutionCandidate.originPermutation.at(i),
-                  iSolutionCandidate.drinkPermutation.at(i),
-                  iSolutionCandidate.heirloomPermutation.at(i));
-                                 
-     sliceArray.push(newSlice);
-   }
-   
-   return CheckAdjacencyConditions(sliceArray);
-}
 
-module.exports = { CheckAdjacencyConditionsOfSolution };
+
+module.exports = { CheckAdjacencyConditions };

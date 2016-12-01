@@ -464,21 +464,7 @@ function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
   return;
 }
 
-function ReadValidSolutions() {
-  const fileContentString = fs.readFileSync("./validSolutions.json", { encoding: "utf-8", flag: 'r'});
-  const arrayData = JSON.parse(fileContentString);
- 
-  const singleSliceValidSolutions = [];
-  for (var solution of arrayData) {
-    const solutionObject = new SolutionCandidate();
-    
- 
-    solutionObject.set_from_parsed_json(solution);
-    singleSliceValidSolutions.push(solutionObject);
-  }
-  
-  return singleSliceValidSolutions;
-}
+
 
 function RecheckSingleSliceValidSolutions(iSingleSliceValidSolutions){
   for (var solution of iSingleSliceValidSolutions) {
@@ -490,16 +476,7 @@ function RecheckSingleSliceValidSolutions(iSingleSliceValidSolutions){
   }
 }
 
-function CheckSolutionsAdjacencyConditions(iSingleSliceValidSolutions){
-  for (var solution of iSingleSliceValidSolutions) {
-    const valid = solution.CheckAdjacencyConditions();
-    
-    if (valid) {
-      console.log("Adjacency Solution Valid, SOLUTION FOUND:");
-      solution.Print();
-    }
-  }
-}
+
 
 //ComputeSingleSliceValidSolutions();
 
