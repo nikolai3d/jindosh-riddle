@@ -1,6 +1,7 @@
 'use strict'
 
 const SolutionCandidate = require("./SolutionCandidate").SolutionCandidate;
+const fs = require('fs');
 
 function ReadPrecomputedSolutionArray() {
   const fileContentString = fs.readFileSync("./validSolutions.json", { encoding: "utf-8", flag: 'r'});
