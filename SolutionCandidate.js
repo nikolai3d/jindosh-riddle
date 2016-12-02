@@ -58,44 +58,44 @@ class SolutionCandidate {
     }
 
     
-    CheckSolution(){
+    // CheckSolution(){
 
-      for (var i=0;i<5;i++) {
-        this._horizontalSlice.set(this.ladyPermutation.at(i),
-                                    this.spotPermutation.at(i),
-                                    this.colorPermutation.at(i),
-                                    this.originPermutation.at(i),
-                                    this.drinkPermutation.at(i),
-                                    this.heirloomPermutation.at(i));
+    //   for (var i=0;i<5;i++) {
+    //     this._horizontalSlice.set(this.ladyPermutation.at(i),
+    //                                 this.spotPermutation.at(i),
+    //                                 this.colorPermutation.at(i),
+    //                                 this.originPermutation.at(i),
+    //                                 this.drinkPermutation.at(i),
+    //                                 this.heirloomPermutation.at(i));
                                     
-      var singleSliceOK = this._horizontalSlice.CheckSingleSliceConditions();
-        if (!singleSliceOK) {
-          return false;
-        }
+    //   var singleSliceOK = this._horizontalSlice.CheckSingleSliceConditions();
+    //     if (!singleSliceOK) {
+    //       return false;
+    //     }
   
-      }
+    //   }
       
-      return true;
-    }
+    //   return true;
+    // }
     
     
-    CheckAdjacencyConditions() {
-      // this.Print();
-      const sliceArray = [];
-      for (var i=0;i<5;i++) {
-        const newSlice = new HorizontalSlice();
-        newSlice.set(this.ladyPermutation.at(i),
-                     this.spotPermutation.at(i),
-                     this.colorPermutation.at(i),
-                     this.originPermutation.at(i),
-                     this.drinkPermutation.at(i),
-                     this.heirloomPermutation.at(i));
+    // CheckAdjacencyConditions() {
+    //   // this.Print();
+    //   const sliceArray = [];
+    //   for (var i=0;i<5;i++) {
+    //     const newSlice = new HorizontalSlice();
+    //     newSlice.set(this.ladyPermutation.at(i),
+    //                 this.spotPermutation.at(i),
+    //                 this.colorPermutation.at(i),
+    //                 this.originPermutation.at(i),
+    //                 this.drinkPermutation.at(i),
+    //                 this.heirloomPermutation.at(i));
                                     
-        sliceArray.push(newSlice);
+    //     sliceArray.push(newSlice);
         
-      }
-      return CheckAdjacencyConditions(sliceArray);    
-    }
+    //   }
+    //   return CheckAdjacencyConditions(sliceArray);    
+    // }
     
     
     Print() {
@@ -104,10 +104,12 @@ class SolutionCandidate {
        }   
     }
     
-    WriteSlices(name) {
-      fs.appendFileSync(name, JSON.stringify(this)+"\n","utf-8", function(err) { console.log("WRITTEN",err);});
-    }
-    AsyncWrite(name) {
-      fs.appendFileSync(name, JSON.stringify(this)+"\n","utf-8", function(err) { console.log("WRITTEN",err);});
-    }
+    // WriteSlices(name) {
+    //   fs.appendFileSync(name, JSON.stringify(this)+"\n","utf-8", function(err) { console.log("WRITTEN",err);});
+    // }
+    // AsyncWrite(name) {
+    //   fs.appendFileSync(name, JSON.stringify(this)+"\n","utf-8", function(err) { console.log("WRITTEN",err);});
+    // }
 }
+
+module.exports = { SolutionCandidate };

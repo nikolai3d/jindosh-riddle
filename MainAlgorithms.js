@@ -103,7 +103,7 @@ function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
               const valid = CheckSingleSliceConditionsOfSolution(preAllocatedSlice, solution);
   
               current = current + 1.0;
-              if (current % 10000000 === 0){
+              if (current % 1000000 === 0){
   
                 var sample = new Date().getTime();
                 var elapsedMS = sample - start;
@@ -194,10 +194,13 @@ function ParallelComputeSingleSliceValidSolutions(){
     } else {
     
       console.log("CHILD", cluster.worker.id);
-      
-      ComputeSingleSliceValidSolutions(cluster.worker.id-1, numCPUs);
-      
-      process.exit(0);
+      try {
+        ComputeSingleSliceValidSolutions(cluster.worker.id-1, numCPUs);
+        process.exit(0);
+      } catch (e) {
+        console.error("Child Process exception ", e, e.stack);
+        process.exit(-1);
+      }
      }
     
 
