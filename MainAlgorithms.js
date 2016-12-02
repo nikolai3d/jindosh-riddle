@@ -1,3 +1,4 @@
+'use strict';
 
 const Permutation = require("./Permutation").Permutation;
 const HorizontalSlice = require("./HorizontalSlice").HorizontalSlice;
@@ -143,4 +144,64 @@ function ComputeSingleSliceValidSolutions(processID, totalProcesses) {
 }
 
 
-module.exports = { ComputeSingleSliceValidSolutions };
+const numCPUs = require('os').cpus().length;
+const cluster = require('cluster');
+const fs = require('fs');
+
+function ParallelComputeSingleSliceValidSolutions(){
+  return new Promise((resolve, reject) => {
+  
+
+    if (cluster.isMaster) {
+      // Fork workers.
+      
+      const singleSliceValidSolutions = [];
+      let workersDone = 0;
+      const messageHandler = function (msg) {
+      if (msg.cmd && msg.cmd == 'foundSolution') {
+        const solutionDataDeepCopy = JSON.parse(msg.solution);
+              
+        singleSliceValidSolutions.push(solutionDataDeepCopy);
+        console.log("GOT SOLUTION");
+        fs.writeFileSync("./validSolutionsParallel.json", JSON.stringify(singleSliceValidSolutions), "utf-8");
+        }
+      };
+  
+      const workerDoneHandler = function (worker, code, signal) {
+        console.log(`Worker ${worker.process.pid} died`);
+        workersDone += 1;
+        
+        if (workersDone === numCPUs) {
+          console.log("Last worker finished, resolving");
+          resolve(singleSliceValidSolutions);
+        }
+      };
+      
+
+      console.log("CPU", numCPUs);
+      for (var i = 0; i < numCPUs; i++) {
+        cluster.fork({"workerID": i});
+      }
+    
+      cluster.on('exit', workerDoneHandler);
+      
+      Object.keys(cluster.workers).forEach((id) => {
+        cluster.workers[id].on('message', messageHandler);
+      });
+      
+      console.log("Master setup complete");
+      
+    } else {
+    
+      console.log("CHILD", cluster.worker.id);
+      
+      ComputeSingleSliceValidSolutions(cluster.worker.id-1, numCPUs);
+      
+      process.exit(0);
+     }
+    
+
+  });
+}
+
+module.exports = { ParallelComputeSingleSliceValidSolutions };
