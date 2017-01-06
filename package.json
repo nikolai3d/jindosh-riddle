@@ -5,6 +5,7 @@
   "main": "main.js",
   "repository": "git@github.com:nikolai3d/jindosh-riddle.git",
   "author": "Nikolai Svakhin <svakhine@adobe.com>",
+  "license": "ISC",
   "dependencies": {
     "allcombinations": "^1.1.1",
     "async": "~0.2.8",
