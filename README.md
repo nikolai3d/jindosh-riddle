@@ -1,22 +1,18 @@
+# JINDOSH RIDDLE SOLVER in NODE.JS
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+A fun coding exercise to brute-force the infamous Jindosh Riddle from Dishonored 2.
 
+# Running
 
-Welcome to your Node.js project on Cloud9 IDE!
+```
+$ node main.js
+```
 
-This chat example showcases how to use `socket.io` with a static `express` server.
+Using parallel computation, computes the `validSolutionsParallel.json`,
+which includes all the solutions for Single-Slice conditions, not the adjacency conditions.
 
-## Running the server
-
-1) Open `server.js` and start the app by clicking on the "Run" button in the top menu.
-
-2) Alternatively you can launch the app from the Terminal:
-
-    $ node server.js
-
-Once the server is running, open the project in the shape of 'https://projectname-username.c9users.io/'. As you enter your name, watch the Users list (on the left) update. Once you press Enter or Send, the message is shared with all connected clients.
+Once you have the `validSolutionsParallel.json` file, run:
+```
+$ node main2.js
+```
+which checks all the valid single-slice solutions for adjacency conditions.

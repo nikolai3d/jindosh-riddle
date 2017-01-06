@@ -1,10 +1,10 @@
 {
-  "name": "chat-example",
-  "version": "0.0.0",
-  "description": "A chat example to showcase how to use `socket.io` with a static `express` server with `async` for control flow.",
-  "main": "server.js",
-  "repository": "",
-  "author": "Mostafa Eweda <mo.eweda@gmail.com>",
+  "name": "jindosh-riddle",
+  "version": "1.0.0",
+  "description": "A fun coding exercise to brute-force the infamous Jindosh Riddle from Dishonored 2.",
+  "main": "main.js",
+  "repository": "git@github.com:nikolai3d/jindosh-riddle.git",
+  "author": "Nikolai Svakhin <svakhine@adobe.com>",
   "dependencies": {
     "allcombinations": "^1.1.1",
     "async": "~0.2.8",
