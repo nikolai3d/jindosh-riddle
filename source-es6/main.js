@@ -1,8 +1,6 @@
-'use strict';
-const MainAlgorithms = require('./MainAlgorithms');
+import ParallelComputeSingleSliceValidSolutions from "./main-algorithms";
 
-
-MainAlgorithms.ParallelComputeSingleSliceValidSolutions()
+ParallelComputeSingleSliceValidSolutions()
 .then(()=>{
 
 })

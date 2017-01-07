@@ -1,6 +1,6 @@
-'use strict';
-const ReadPrecomputedSolutionArray = require('./SolutionCandidateIO').ReadPrecomputedSolutionArray;
-const CheckAdjacencyConditionsOfSolutionArray = require('./SolutionCandidateAlgorithms').CheckAdjacencyConditionsOfSolutionArray;
+
+import ReadPrecomputedSolutionArray from "./solution-candidate-io";
+import { CheckAdjacencyConditionsOfSolutionArray } from "./solution-candidate-algorithms";
 
 try {
   const precomputedArray = ReadPrecomputedSolutionArray();

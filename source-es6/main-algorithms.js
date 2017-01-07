@@ -1,10 +1,9 @@
-'use strict';
 
-const Permutation = require("./Permutation").Permutation;
-const HorizontalSlice = require("./HorizontalSlice").HorizontalSlice;
-const SolutionCandidate = require("./SolutionCandidate").SolutionCandidate;
-const allcombinations = require('allcombinations');
-const CheckSingleSliceConditionsOfSolution = require("./SolutionCandidateAlgorithms").CheckSingleSliceConditionsOfSolution;
+import HorizontalSlice from "./horizontal-slice";
+import Permutation from "./permutation";
+import SolutionCandidate from "./solution-candidate";
+import allcombinations from "allcombinations";
+import {CheckSingleSliceConditionsOfSolution} from "./solution-candidate-algorithms";
 
 const noPermutationIndexArray = [0, 1, 2, 3, 4];
 
@@ -206,4 +205,4 @@ function ParallelComputeSingleSliceValidSolutions(){
   });
 }
 
-module.exports = { ParallelComputeSingleSliceValidSolutions };
+export default ParallelComputeSingleSliceValidSolutions;

@@ -9,6 +9,14 @@ Transpile the source files using Babel:
 $ npm run-script build
 ```
 
+# Sustained Building during development
+
+If you are altering the code, watch/build script should be ran in the separate terminal window to automatically transpile the result as the source-es6/ files are being changed:
+```
+$ npm run-script watch
+```
+
+
 # Running
 
 ```

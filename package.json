@@ -17,11 +17,13 @@
     "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-2": "^6.11.0",
-    "babel-register": "^6.11.6"
+    "babel-register": "^6.11.6",
+    "nodemon": "^1.11.0"
   },
   "scripts": {
     "build": "babel source-es6 -d build",
     "start": "node build/main.js",
+    "watch": "nodemon --watch source-es6 --exec 'babel source-es6 -d build' ",
     "test": "mocha --compilers js:babel-register"
   }
 }

@@ -1,9 +1,11 @@
-const CheckSingleSliceConditions = require("./HorizontalSliceAlgorithms").CheckSingleSliceConditions;
-const CheckAdjacencyConditions = require("./SliceArrayAlgorithms").CheckAdjacencyConditions;
-const HorizontalSlice = require("./HorizontalSlice").HorizontalSlice;
+import CheckSingleSliceConditions from "./horizontal-slice-algorithms";
+
+import CheckAdjacencyConditions from "./slice-array-algorithms";
+
+import HorizontalSlice from "./horizontal-slice";
 
 function CheckSingleSliceConditionsOfSolution(iSliceObject, iSolutionCandidate){
- 
+
    for (var i=0;i<5;i++) {
      iSliceObject.set(iSolutionCandidate.ladyPermutation.at(i),
                       iSolutionCandidate.spotPermutation.at(i),
@@ -11,13 +13,13 @@ function CheckSingleSliceConditionsOfSolution(iSliceObject, iSolutionCandidate){
                       iSolutionCandidate.originPermutation.at(i),
                       iSolutionCandidate.drinkPermutation.at(i),
                       iSolutionCandidate.heirloomPermutation.at(i));
-                      
+
    var singleSliceOK = CheckSingleSliceConditions(iSliceObject);
      if (!singleSliceOK) {
        return false;
      }
    }
-   
+
    return true;
 }
 
@@ -31,10 +33,10 @@ function CheckAdjacencyConditionsOfSolution(iSolutionCandidate){
                   iSolutionCandidate.originPermutation.at(i),
                   iSolutionCandidate.drinkPermutation.at(i),
                   iSolutionCandidate.heirloomPermutation.at(i));
-                                 
+
      sliceArray.push(newSlice);
    }
-   
+
    return CheckAdjacencyConditions(sliceArray);
 }
 
@@ -49,5 +51,5 @@ function CheckAdjacencyConditionsOfSolutionArray(iPrecomputedSolutionArray){
   }
 }
 
-module.exports = { CheckSingleSliceConditionsOfSolution,
-                   CheckAdjacencyConditionsOfSolutionArray }; 
+export { CheckSingleSliceConditionsOfSolution,
+         CheckAdjacencyConditionsOfSolutionArray };

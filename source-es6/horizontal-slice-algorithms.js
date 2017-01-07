@@ -1,4 +1,3 @@
-'use strict';
 
 const gSingleSliceConditions = [
   {"lady": "Doctor Marcolla", "spot": 1},
@@ -13,7 +12,7 @@ const gSingleSliceConditions = [
   {"lady": "Madam Natsiou", "heirloom": "Ring"},
   {"color": "Red", "drink": "Absinthe"}
   ];
-  
+
 function CheckSingleSliceConditions(iHorizontalSlice) {
     var check = false;
     for (var condition of gSingleSliceConditions) {
@@ -21,10 +20,9 @@ function CheckSingleSliceConditions(iHorizontalSlice) {
         if (!check) return false;
     }
 
-    return true; 
+    return true;
   }
 
 /* iSliceObject - preallocated HorizontalSlice Object */
 
-
-module.exports = {CheckSingleSliceConditions};
+export default CheckSingleSliceConditions;

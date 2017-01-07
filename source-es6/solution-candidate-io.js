@@ -1,7 +1,5 @@
-'use strict'
-
-const SolutionCandidate = require("./SolutionCandidate").SolutionCandidate;
-const fs = require('fs');
+import SolutionCandidate from "./solution-candidate";
+import * as fs from "fs";
 
 function ReadPrecomputedSolutionArray() {
   const fileContentString = fs.readFileSync("./validSolutionsParallel.json", { encoding: "utf-8", flag: 'r'});
@@ -19,4 +17,4 @@ function ReadPrecomputedSolutionArray() {
   return singleSliceValidSolutions;
 }
 
-module.exports = {ReadPrecomputedSolutionArray};
+export default ReadPrecomputedSolutionArray;

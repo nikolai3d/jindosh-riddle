@@ -1,6 +1,3 @@
-
-'use strict';
-
 class Permutation {
     constructor() {
       this.itemsArray = [];
@@ -11,14 +8,14 @@ class Permutation {
       this.itemsArray = itemsArray;
       this.indicesArray = indicesArray;
     }
-    
+
     at(i) {
       const index = this.indicesArray[i];
       return this.itemsArray[index];
     }
-    
+
     printable_at(i) {
-     var toPrint = ""; 
+     var toPrint = "";
      const stringv = this.at(i).toString();
         if (stringv.length >= 8) {
             toPrint += (stringv+"\t");
@@ -27,7 +24,7 @@ class Permutation {
         }
         return toPrint;
     }
-    
+
     set_from_parsed_json(iData){
 
       this.itemsArray = iData.itemsArray;
@@ -36,4 +33,4 @@ class Permutation {
     }
 }
 
-module.exports = { Permutation }
+export default Permutation;

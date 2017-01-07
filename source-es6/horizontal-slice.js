@@ -1,7 +1,5 @@
-'use strict';
-
 class HorizontalSlice {
-  
+
   constructor() {
     this.lady = null;
     this.spot = null;
@@ -10,7 +8,7 @@ class HorizontalSlice {
     this.drink = null;
     this.heirloom = null;
   }
-  
+
   set(lady, spot, color, origin, drink, heirloom) {
     this.lady = lady;
     this.spot = spot;
@@ -19,9 +17,9 @@ class HorizontalSlice {
     this.drink = drink;
     this.heirloom = heirloom;
   }
-  
-  
-  
+
+
+
   Check(checkJSON) {
     var conditionCheck = [];
     for (let propIndex in checkJSON) {
@@ -35,26 +33,26 @@ class HorizontalSlice {
         conditionCheck.push(false);
       }
     }
-    
+
     if (conditionCheck.length === 0){
       return true;
     }
-    
+
     var and_check = conditionCheck[0];
     var or_check = conditionCheck[0];
-    
+
     for (var k=1;k<conditionCheck.length;k++){
       and_check = and_check && conditionCheck[k];
       or_check = or_check || conditionCheck[k];
     }
-    
+
     if (and_check === or_check) {
       return true;
     } else {
       return false;
     }
-    
+
   }
 }
 
-module.exports = { HorizontalSlice };
+export default HorizontalSlice;
